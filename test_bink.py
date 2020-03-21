@@ -58,13 +58,81 @@ class TestBinkTest():
 
     def test_user_option_1(self, test_csv_data):
         # Create the object
-        bink_test = BinkTest()
+        bink_test = BinkTest(filename='testname.csv')
 
         # Mock the return of open to inject a StringIO object rather than a file object
         f = StringIO(test_csv_data)
         with mock.patch('bink.open', return_value=f):
-            with mock.patch('builtins.print') as mock_print:
+            with mock.patch('bink.BinkTest.print_container') as mock_print:
                 bink_test.process_user_input(1)
                 assert bink_test.data
-                out_string = "Property Name,Property Address [1],Property  Address [2],Property Address [3],Property Address [4],Unit Name,Tenant Name,Lease Start Date,Lease End Date,Lease Years,Current Rent\nPotternewton Crescent,Potternewton Est Playing Field,,,LS7,Potternewton Est Playing Field,Arqiva Ltd,24 Jun 1999,23 Jun 2019,20.0,6600.0\nQueenswood Heights,Queenswood Heights,Queenswood Gardens,Headingley,Leeds,Queenswood Hgt-Telecom App.,Vodafone Ltd,08 Nov 2004,07 Nov 2029,25.0,9500.0\nArmley - Burnsall Grange,Armley,LS13,,,Burnsall Grange CSR 37865,O2 (UK) Ltd,26 Jul 2007,25 Jul 2032,25.0,12000.0\nSeacroft Gate (Chase) - Block 2,Telecomms Apparatus,Leeds,,LS14,Seacroft Gate (Chase) block 2-Telecom App.,Vodafone Ltd.,30 Jan 2004,29 Jan 2029,25.0,12250.0\nSeacroft Gate (Chase) - Block 2,Telecomms Apparatus,Leeds,,LS14,Seacroft Gate (Chase) - Block 2, WYK 0414,Hutchinson3G Uk Ltd&Everything Everywhere Ltd,21 Aug 2007,20 Aug 2032,25.0,12750.0\n"
-                mock_print.assert_called_with(out_string)
+                result_list = []
+                result_list.append(bink_test.data[1])
+                result_list.append(bink_test.data[3])
+                result_list.append(bink_test.data[4])
+                result_list.append(bink_test.data[2])
+                result_list.append(bink_test.data[5])
+                mock_print.assert_called_with(result_list)
+
+    def test_user_option_2(self, test_csv_data):
+        # Create the object
+        bink_test = BinkTest(filename='testname.csv')
+
+        # Mock the return of open to inject a StringIO object rather than a file object
+        f = StringIO(test_csv_data)
+        with mock.patch('bink.open', return_value=f):
+            with mock.patch('bink.BinkTest.print_container') as mock_print:
+                bink_test.process_user_input(2)
+                assert bink_test.data
+                result_list = []
+                result_list.append(bink_test.data[2])
+                result_list.append(bink_test.data[3])
+                result_list.append(bink_test.data[4])
+                result_list.append(bink_test.data[5])
+                mock_print.assert_called_with(result_list)
+
+    def test_user_option_3(self, test_csv_data):
+        # Create the object
+        bink_test = BinkTest(filename='testname.csv')
+
+        # Mock the return of open to inject a StringIO object rather than a file object
+        f = StringIO(test_csv_data)
+        with mock.patch('bink.open', return_value=f):
+            with mock.patch('bink.BinkTest.print_container') as mock_print:
+                bink_test.process_user_input(3)
+                assert bink_test.data
+                out_dict = {'Arqiva Ltd': 1,
+                            'Arqiva Services ltd': 1,
+                            'Cornerstone Telecommunications Infrastructure': 16,
+                            'Everything Everywhere Ltd': 4,
+                            'Everything Everywhere Ltd & Hutchinson 3G UK': 3,
+                            'Everything Everywhere Ltd & Hutchison 3G Ltd': 1,
+                            'Everything Everywhere Ltd&Hutchison 3G UK LTd': 1,
+                            'Everything Everywhere Ltd&Hutchison 3G UK Ltd': 8,
+                            'Everything Everywhere Ltd&Hutchsion 3G Ltd': 1,
+                            'Everything Everywhere Ltd&Hutchsion 3G UK Ltd': 1,
+                            'EverythingEverywhere Ltd & Hutchinson3GUK Ltd': 1,
+                            'Hutchinson3G Uk Ltd&Everything Everywhere Ltd': 1,
+                            'O2 (UK) Ltd': 1,
+                            'Vodafone Ltd': 1,
+                            'Vodafone Ltd.': 1}
+
+                mock_print.assert_called_with(out_dict, headers=['Tenant Name', 'Count'])
+
+    def test_user_option_4(self, test_csv_data):
+        # Create the object
+        bink_test = BinkTest(filename='testname.csv')
+
+        # Mock the return of open to inject a StringIO object rather than a file object
+        f = StringIO(test_csv_data)
+        with mock.patch('bink.open', return_value=f):
+            with mock.patch('bink.BinkTest.print_container') as mock_print:
+                bink_test.process_user_input(4)
+                assert bink_test.data
+                result_list = []
+                result_list.append(bink_test.data[1])
+                result_list.append(bink_test.data[2])
+                result_list.append(bink_test.data[3])
+                result_list.append(bink_test.data[4])
+                result_list.append(bink_test.data[5])
+                mock_print.assert_called_with(result_list)
