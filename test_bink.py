@@ -136,3 +136,41 @@ class TestBinkTest():
                 result_list.append(bink_test.data[4])
                 result_list.append(bink_test.data[5])
                 mock_print.assert_called_with(result_list)
+
+    def test_read_csv_data(self, test_csv_data):
+        # Create the object
+        bink_test = BinkTest(filename='testname.csv')
+
+        # Check when file doesn't exist
+        with pytest.raises(ReadFileError):
+            bink_test._read_csv_data()
+
+        # Check when normally operating
+        f = StringIO(test_csv_data)
+        with mock.patch('bink.open', return_value=f):
+            bink_test._read_csv_data()
+            assert bink_test.data
+
+        # Check when it read a file with no data
+        with mock.patch('bink.open', return_value=StringIO('')):
+            with pytest.raises(ReadFileError):
+                bink_test._read_csv_data()
+
+    def test_sort_by_field_no_data(self):
+        # Create the object
+        bink_test = BinkTest(filename='testname.csv')
+        assert not bink_test.data
+
+        # Check it returns blank if no data
+        assert not bink_test._sort_by_field('irrelevant')
+
+    def test_filter_by_field_value_no_data(self):
+        # Create the object
+        bink_test = BinkTest(filename='testname.csv')
+        assert not bink_test.data
+
+        # Check it returns blank if no data
+        assert not bink_test._filter_by_field_value('irrelevant', 'irrelevant', 'irrelevant', in_list=[])
+
+        # Same again, but with empty main list
+        assert not bink_test._filter_by_field_value('irrelevant', 'irrelevant', 'irrelevant')

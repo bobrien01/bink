@@ -129,6 +129,9 @@ class BinkTest():
                 filtered_list = [i for i in filter(lambda x: compare_field(x[field]), in_list)]
                 return filtered_list
 
+        else:
+            return in_list
+
     def _count_occurrence_of_field(self, key_field):
         # Function to count the occurrences of the key_field and return a dict
         count_dict = {}
